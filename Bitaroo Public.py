@@ -2,8 +2,8 @@ import requests
 
 
 #User Input:
-Trade_Amount = XXXX # <- Replace XXXX with how much you'd like each buy in to be.
 Bearer_Token = XXXX # <- Replace XXXX with API Key in form KeyID.secret
+Trade_Amount = XXXX # <- Replace XXXX with how much you'd like each buy in to be.
 
 #Trade_Amount should be set to a quarter of how much you'd like to invest
 #everytime the script is run. I invest 200 a week so i set it to 50.
@@ -18,18 +18,6 @@ order_book_api = "https://api.bitaroo.com.au/v1/market/order-book"
 headers = {
     "Authorization": f"Bearer {Bearer_Token}"
 }
-
-def check_aud_balance():
-
-    balance_response = requests.get(balance_api, headers=headers)
-
-    balance_data = balance_response.json()
-
-    for data in balance_data:
-        if data["assetSymbol"] == "aud":
-            balance = data["avaliable"]
-    
-    return balance
 
 def delete_open_orders():
     try:
@@ -112,15 +100,14 @@ def main():
     
     price = get_price()
 
+
     #Quick Buying Old Orders
     deleted_orders = delete_open_orders()
     if deleted_orders > 0:
         place_old_orders_quick(price, deleted_orders) 
     
     #Making New Orders
-    if check_aud_balance() >= 200:
-        order_numbers = place_all_orders(price)
-
+    order_numbers = place_all_orders(price)
 
 
 if __name__ == "__main__":
